@@ -1,0 +1,492 @@
+{
+  "HOSPITALS_DB": [
+    {
+      "id": "hz-calavi",
+      "name": "Hôpital de Zone d'Abomey-Calavi & Sô-Ava",
+      "type": "public",
+      "image": "https://images.unsplash.com/photo-1587351021355-a479a299d2f9?auto=format&fit=crop&q=80&w=600",
+      "rating": 4.3,
+      "reviewsCount": 142,
+      "distance": "1.2 km",
+      "address": "Rue de l'Hôpital de Zone, Quartier Sèmè-Podji, Abomey-Calavi",
+      "phone": "+229 21 36 01 22",
+      "hours": "Ouvert 24h/24",
+      "isVerified": true,
+      "services": [
+        "Urgences",
+        "Pédiatrie",
+        "Maternité",
+        "Chirurgie",
+        "Médecine Générale"
+      ],
+      "priceList": [
+        {
+          "name": "Consultation Médecine Générale",
+          "priceXOF": 2000,
+          "priceSats": 3330
+        },
+        {
+          "name": "Bilan NFS / Sanguin Complet",
+          "priceXOF": 4500,
+          "priceSats": 7500
+        },
+        {
+          "name": "Test Rapide Paludisme (GE)",
+          "priceXOF": 1500,
+          "priceSats": 2500
+        },
+        {
+          "name": "Échographie Obstétricale",
+          "priceXOF": 8000,
+          "priceSats": 13320
+        },
+        {
+          "name": "Ordonnance Traitement Paludisme type",
+          "priceXOF": 3500,
+          "priceSats": 5830
+        }
+      ],
+      "reviews": [
+        {
+          "id": "r1",
+          "author": "Pascal Houessou",
+          "rating": 5,
+          "date": "25 Juin 2026",
+          "comment": "Le service de pédiatrie est exceptionnel. Prise en charge très rapide pour mon fils."
+        },
+        {
+          "id": "r2",
+          "author": "Marielle Tossou",
+          "rating": 4,
+          "date": "12 Juin 2026",
+          "comment": "L'hôpital public de référence à Calavi. Parfois un peu d'attente aux urgences, mais les médecins sont très compétents."
+        },
+        {
+          "id": "r3",
+          "author": "Gaston Houndéton",
+          "rating": 4,
+          "date": "03 Juin 2026",
+          "comment": "Propre et bien organisé depuis la mise en place du paiement numérique. Pas de files d'attente interminables."
+        }
+      ],
+      "coords": {
+        "x": 48,
+        "y": 52
+      },
+      "lat": 6.4385,
+      "lng": 2.3412
+    },
+    {
+      "id": "chd-atlantique",
+      "name": "CHD Atlantique (Hôpital Universitaire)",
+      "type": "public",
+      "image": "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&q=80&w=600",
+      "rating": 4.5,
+      "reviewsCount": 238,
+      "distance": "2.4 km",
+      "address": "Route Inter-États, Près du Campus Universitaire d'Abomey-Calavi (UAC)",
+      "phone": "+229 21 36 12 44",
+      "hours": "Ouvert 24h/24",
+      "isVerified": true,
+      "services": [
+        "Urgences",
+        "Cardiologie",
+        "Radiologie",
+        "Gynécologie",
+        "Laboratoire d'analyses"
+      ],
+      "priceList": [
+        {
+          "name": "Consultation Spécialiste",
+          "priceXOF": 5000,
+          "priceSats": 8330
+        },
+        {
+          "name": "Radiographie Thoracique",
+          "priceXOF": 10000,
+          "priceSats": 16660
+        },
+        {
+          "name": "Bilan Lipidique & Glycémie",
+          "priceXOF": 6000,
+          "priceSats": 10000
+        },
+        {
+          "name": "Scanner Cérébral",
+          "priceXOF": 45000,
+          "priceSats": 75000
+        }
+      ],
+      "reviews": [
+        {
+          "id": "r4",
+          "author": "Chantal Agon",
+          "rating": 5,
+          "date": "18 Juin 2026",
+          "comment": "Équipements de pointe et professeurs très à l'écoute. Très bon suivi gynécologique."
+        },
+        {
+          "id": "r5",
+          "author": "Christian Soglo",
+          "rating": 4,
+          "date": "10 Juin 2026",
+          "comment": "Situé juste à côté de l'UAC. Pratique pour les étudiants et les habitants de Calavi."
+        }
+      ],
+      "coords": {
+        "x": 32,
+        "y": 38
+      },
+      "lat": 6.4182,
+      "lng": 2.3395
+    },
+    {
+      "id": "clinique-sainte-famille",
+      "name": "Clinique Privée Sainte-Famille",
+      "type": "private",
+      "image": "https://images.unsplash.com/photo-1629909613654-28e377c37b09?auto=format&fit=crop&q=80&w=600",
+      "rating": 4.7,
+      "reviewsCount": 85,
+      "distance": "3.8 km",
+      "address": "Quartier Zogbadjè, Face 2ème entrée du Campus, Abomey-Calavi",
+      "phone": "+229 97 45 11 89",
+      "hours": "07:00 - 22:00",
+      "isVerified": true,
+      "services": [
+        "Médecine Générale",
+        "Maternité",
+        "Pédiatrie",
+        "Dentisterie",
+        "Échographie"
+      ],
+      "priceList": [
+        {
+          "name": "Consultation Générale",
+          "priceXOF": 3000,
+          "priceSats": 5000
+        },
+        {
+          "name": "Consultation Dentaire",
+          "priceXOF": 5000,
+          "priceSats": 8330
+        },
+        {
+          "name": "Détartrage & Soins",
+          "priceXOF": 15000,
+          "priceSats": 25000
+        },
+        {
+          "name": "Échographie Pelvienne",
+          "priceXOF": 10000,
+          "priceSats": 16660
+        }
+      ],
+      "reviews": [
+        {
+          "id": "r6",
+          "author": "Bienvenue Segnon",
+          "rating": 5,
+          "date": "29 Juin 2026",
+          "comment": "Le cadre est magnifique et d'une propreté impeccable. Service client très réactif."
+        },
+        {
+          "id": "r7",
+          "author": "Félicité Kpodékon",
+          "rating": 4,
+          "date": "21 Juin 2026",
+          "comment": "Clinique privée excellente. Les tarifs sont un peu plus élevés mais le confort et l'accueil le justifient largement."
+        }
+      ],
+      "coords": {
+        "x": 58,
+        "y": 28
+      },
+      "lat": 6.4255,
+      "lng": 2.3298
+    },
+    {
+      "id": "cs-calavi-centre",
+      "name": "Centre de Santé de Calavi-Centre",
+      "type": "clinic",
+      "image": "https://images.unsplash.com/photo-1516549655169-df83a0774514?auto=format&fit=crop&q=80&w=600",
+      "rating": 3.9,
+      "reviewsCount": 56,
+      "distance": "0.8 km",
+      "address": "Avenue de la Mairie, En face de l'Hôtel de Ville, Abomey-Calavi",
+      "phone": "+229 21 36 04 11",
+      "hours": "08:00 - 18:00",
+      "isVerified": true,
+      "services": [
+        "Vaccination",
+        "Planification Familiale",
+        "Consultation Prénatale",
+        "Soins Infirmiers"
+      ],
+      "priceList": [
+        {
+          "name": "Consultation Infirmière",
+          "priceXOF": 1000,
+          "priceSats": 1660
+        },
+        {
+          "name": "Pansement & Injection",
+          "priceXOF": 800,
+          "priceSats": 1330
+        },
+        {
+          "name": "Carnet de Santé & Pesée",
+          "priceXOF": 500,
+          "priceSats": 830
+        }
+      ],
+      "reviews": [
+        {
+          "id": "r8",
+          "author": "Ablavi Hounkpè",
+          "rating": 4,
+          "date": "14 Juin 2026",
+          "comment": "Centre public idéal pour les vaccins et suivis de bébé. Très abordable."
+        }
+      ],
+      "coords": {
+        "x": 44,
+        "y": 68
+      },
+      "lat": 6.4452,
+      "lng": 2.3478
+    },
+    {
+      "id": "clinique-solidarite",
+      "name": "Clinique de la Solidarité (Bidossessi)",
+      "type": "private",
+      "image": "https://images.unsplash.com/photo-1551076805-e1869033e561?auto=format&fit=crop&q=80&w=600",
+      "rating": 4.2,
+      "reviewsCount": 42,
+      "distance": "1.9 km",
+      "address": "Bidossessi, à 200m du Carrefour Kpota, Abomey-Calavi",
+      "phone": "+229 95 33 22 11",
+      "hours": "08:00 - 20:00",
+      "isVerified": true,
+      "services": [
+        "Médecine Générale",
+        "Petite Chirurgie",
+        "Analyses Médicales",
+        "Pharmacie de garde"
+      ],
+      "priceList": [
+        {
+          "name": "Consultation de Jour",
+          "priceXOF": 2500,
+          "priceSats": 4160
+        },
+        {
+          "name": "Consultation d'Urgence / Nuit",
+          "priceXOF": 5000,
+          "priceSats": 8330
+        },
+        {
+          "name": "Analyse d'Urine (ECBU)",
+          "priceXOF": 4000,
+          "priceSats": 6660
+        },
+        {
+          "name": "Suture de Plaie Simple",
+          "priceXOF": 6000,
+          "priceSats": 10000
+        }
+      ],
+      "reviews": [
+        {
+          "id": "r9",
+          "author": "Marc Djivo",
+          "rating": 4,
+          "date": "26 Mai 2026",
+          "comment": "Clinique de quartier sérieuse. Prise en charge immédiate pour les petites urgences."
+        }
+      ],
+      "coords": {
+        "x": 74,
+        "y": 48
+      },
+      "lat": 6.452,
+      "lng": 2.3595
+    }
+  ],
+  "APPOINTMENTS_DB": [
+    {
+      "id": "apt-821",
+      "hospitalId": "hz-calavi",
+      "hospitalName": "Hôpital de Zone d'Abomey-Calavi & Sô-Ava",
+      "date": "2026-07-02",
+      "timeSlot": "10:30",
+      "patientName": "Bienvenue Segnon",
+      "patientEmail": "bienvenuesegnon@gmail.com",
+      "status": "confirmed",
+      "service": "Médecine Générale",
+      "reason": "Consultation Générale",
+      "isPaid": true,
+      "paymentMethod": "Wallet",
+      "amountPaidXOF": 2000,
+      "amountPaidSats": 3330,
+      "creditAvailable": false,
+      "createdAt": "2026-07-01T10:00:00Z"
+    }
+  ],
+  "MEDICAL_DOCUMENTS_DB": [
+    {
+      "id": "doc-101",
+      "patientNpi": "1097885544901",
+      "title": "Ordonnance anti-paludéenne",
+      "type": "prescription",
+      "priceXOF": 4500,
+      "priceSats": 7500,
+      "hospitalId": "hz-calavi",
+      "hospitalName": "Hôpital de Zone d'Abomey-Calavi & Sô-Ava",
+      "doctorName": "Dr. Jean Sossou",
+      "doctorEmail": "sossou@sante.bj",
+      "date": "15/06/2026 à 09:30",
+      "items": [
+        {
+          "name": "Artemether + Lumefantrine (Coartem)",
+          "priceXOF": 3000
+        },
+        {
+          "name": "Paracétamol 500mg",
+          "priceXOF": 1500
+        }
+      ],
+      "notes": "À prendre pendant 3 jours après les repas.",
+      "history": [
+        {
+          "modifiedAt": "15/06/2026 à 09:35",
+          "modifiedBy": "Dr. Jean Sossou",
+          "changes": "Correction de la dose de Paracétamol (500mg au lieu de 1g)"
+        }
+      ]
+    },
+    {
+      "id": "doc-102",
+      "patientNpi": "1097885544901",
+      "title": "Bilan Sanguin / NFS",
+      "type": "analyses",
+      "priceXOF": 8000,
+      "priceSats": 13320,
+      "hospitalId": "hz-calavi",
+      "hospitalName": "Hôpital de Zone d'Abomey-Calavi & Sô-Ava",
+      "doctorName": "Dr. Jean Sossou",
+      "doctorEmail": "sossou@sante.bj",
+      "date": "18/06/2026 à 11:15",
+      "items": [
+        {
+          "name": "Numération Formule Sanguine (NFS)",
+          "priceXOF": 5000
+        },
+        {
+          "name": "Vitesse de sédimentation",
+          "priceXOF": 3000
+        }
+      ],
+      "notes": "Urgent pour vérification anémie.",
+      "history": []
+    }
+  ],
+  "INVOICES_DB": [
+    {
+      "id": "FACT-392817",
+      "patientName": "Bienvenue Segnon",
+      "patientPhone": "+229 97 88 55 44",
+      "hospitalName": "CHD Atlantique (Hôpital Universitaire)",
+      "hospitalAddress": "Route Inter-États, Près du Campus Universitaire d'Abomey-Calavi (UAC)",
+      "date": "20 Juin 2026 à 10:45",
+      "items": [
+        {
+          "name": "Consultation Spécialiste",
+          "priceXOF": 5000
+        },
+        {
+          "name": "Test Rapide Paludisme (GE)",
+          "priceXOF": 1500
+        }
+      ],
+      "totalXOF": 6500,
+      "totalSats": 10790,
+      "paymentMethod": "Wallet",
+      "txHash": "tx_benin_0x5c7f763ab21e3f890ad678ec4532bce78d8fe0192",
+      "isPaid": true,
+      "doctorName": "Dr. Jean Sossou"
+    }
+  ],
+  "LIGHTNING_INVOICES_DB": {
+    "LN-INV-958404": {
+      "id": "LN-INV-958404",
+      "amountXOF": 12500,
+      "amountSats": 20825,
+      "bolt11": "lnbc20825u1p392066pp5y6m8a6uclm0aqlu7r96paxd0zcrsqm3sff4pghu5r3qpsms9p57qdqg2fhk6mmpwq5kget8wf5k2cmzv9hkutssw3skget8v4cxjumn94sk2uewdqh8gmpwd3jxc6tvd3hxw3scqpvqyjw5qcqpxrzjqw72q3ksla762hsp48qaswep7mqcxw6mppv6mpwpwqf7mpws9p4xpwpvq5qshxztf9f8gskqfq9gqkcxsqypqxpqxzszqxpqw7p9sk7tve9ekymv9cxqpxrzjqw72q3ksla762hsp48qaswep7mqcxw6mppv6mpwpwqf7mpws9p4xpwpvq5qshxztf9f8gskqfq9gqkcxsqypqxpqxzszqxpqw7p9",
+      "isPaid": true,
+      "txHash": "ln_tx_0x0610642ac316d73158e85597dcadd04094418874",
+      "createdAt": 1783176898094
+    },
+    "LN-INV-206934": {
+      "id": "LN-INV-206934",
+      "amountXOF": 12500,
+      "amountSats": 20825,
+      "bolt11": "lnbc20825u1p392066pp5y6m8a6uclm0aqlu7r96paxd0zcrsqm3sff4pghu5r3qpsms9p57qdqg2fhk6mmpwq5kget8wf5k2cmzv9hkutssw3skget8v4cxjumn94sk2uewdqh8gmpwd3jxc6tvd3hxw3scqpvqyjw5qcqpxrzjqw72q3ksla762hsp48qaswep7mqcxw6mppv6mpwpwqf7mpws9p4xpwpvq5qshxztf9f8gskqfq9gqkcxsqypqxpqxzszqxpqw7p9sk7tve9ekymv9cxqpxrzjqw72q3ksla762hsp48qaswep7mqcxw6mppv6mpwpwqf7mpws9p4xpwpvq5qshxztf9f8gskqfq9gqkcxsqypqxpqxzszqxpqw7p9",
+      "isPaid": true,
+      "txHash": "ln_tx_0x852940de77dfc7ea7602e158413d35119faeff86",
+      "createdAt": 1783176930175
+    }
+  },
+  "ACCESS_REQUESTS_DB": [
+    {
+      "id": "req-1",
+      "npi": "1097885544901",
+      "doctorEmail": "dr.sossou@sante.bj",
+      "hospitalName": "CHD Atlantique (Hôpital Universitaire)",
+      "status": "pending",
+      "requestedAt": "30/06/2026 à 08:15"
+    }
+  ],
+  "PATIENTS_DB": {
+    "bienvenuesegnon@gmail.com": {
+      "name": "Bienvenue Segnon",
+      "email": "bienvenuesegnon@gmail.com",
+      "phone": "+229 97 88 55 44",
+      "walletBalance": 15000,
+      "satoshiBalance": 25000,
+      "npi": "1097885544901",
+      "avatar": "BS"
+    },
+    "alice.dovonou@gmail.com": {
+      "name": "Alice Dovonou",
+      "email": "alice.dovonou@gmail.com",
+      "phone": "+229 95 34 12 78",
+      "walletBalance": 45000,
+      "satoshiBalance": 75000,
+      "npi": "2095341278102",
+      "avatar": "AD"
+    }
+  },
+  "HOSPITAL_USERS_DB": [
+    {
+      "email": "admin@sante.bj",
+      "password": "123456",
+      "hospitalId": "system-admin",
+      "role": "admin",
+      "name": "Administrateur National"
+    },
+    {
+      "email": "dr.sossou@sante.bj",
+      "password": "123456",
+      "hospitalId": "chd-atlantique",
+      "role": "doctor",
+      "name": "Dr. Jean Sossou"
+    },
+    {
+      "email": "sonia.gbaguidi@sante.bj",
+      "password": "123456",
+      "hospitalId": "hz-calavi",
+      "role": "admin",
+      "name": "Sonia Gbaguidi"
+    }
+  ]
+}
