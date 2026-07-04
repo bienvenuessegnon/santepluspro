@@ -2,9 +2,26 @@ import express from "express";
 import path from "path";
 import { createServer as createViteServer } from "vite";
 import fs from "fs";
+import crypto from "crypto";
 
 // Seed Databases in-memory
 const XOF_TO_SATS = 1.666;
+
+// Helper: SHA-256 hash
+function sha256(data: string): string {
+  return crypto.createHash('sha256').update(data).digest('hex');
+}
+
+// Bitcoin Blockchain Anchor Tracker (in-memory; can be moved to DB)
+// For future integration with actual Bitcoin testnet/mainnet
+let BLOCKCHAIN_ANCHORS: Record<string, {
+  hash: string;
+  txid?: string;
+  bitcoinAddress?: string;
+  timestamp: string;
+  status: 'pending' | 'confirmed' | 'failed';
+  documentId: string;
+}> = {};
 
 let HOSPITALS_DB = [
   {
@@ -774,6 +791,261 @@ async function startServer() {
     saveDb();
 
     res.json(doc);
+  });
+
+  // 5f. POST DOCTOR SENDS DOCUMENTS + INVOICE + PAYMENT QR TO PATIENT
+  app.post("/api/medical-documents/:id/send-to-patient", (req, res) => {
+    const { id } = req.params;
+    const { patientEmail, attachmentType, invoiceTotal, paymentQrCode, paymentReference } = req.body;
+
+    const doc = MEDICAL_DOCUMENTS_DB.find(d => d.id === id);
+    if (!doc) {
+      return res.status(404).json({ error: "Document médical introuvable" });
+    }
+
+    // Mark document as sent and hash the content for integrity
+    const docContent = JSON.stringify({
+      title: doc.title,
+      items: doc.items,
+      notes: doc.notes,
+      priceXOF: doc.priceXOF,
+      priceSats: doc.priceSats,
+      date: doc.date
+    });
+    const contentHash = sha256(docContent);
+
+    const sentRecord = {
+      sentAt: new Date().toISOString(),
+      sentTo: patientEmail,
+      attachmentType: attachmentType || 'medical-record',  // 'medical-record', 'prescription', 'invoice', 'receipt'
+      contentHash: contentHash,
+      paymentReference: paymentReference || null,
+      paymentQrCode: paymentQrCode || null,
+      invoiceTotal: invoiceTotal || doc.priceXOF
+    };
+
+    if (!doc.sentHistory) {
+      doc.sentHistory = [];
+    }
+    doc.sentHistory.push(sentRecord);
+
+    // Auto-create invoice if payment reference provided
+    if (paymentReference && invoiceTotal) {
+      const invoice = {
+        id: `FACT-${Math.floor(100000 + Math.random() * 900000)}`,
+        documentId: id,
+        patientName: doc.patientNpi || 'Patient',
+        patientEmail: patientEmail,
+        hospitalName: doc.hospitalName,
+        date: new Date().toLocaleDateString('fr-FR') + ' à ' + new Date().toLocaleTimeString('fr-FR', {hour: '2-digit', minute:'2-digit'}),
+        items: doc.items || [],
+        totalXOF: Number(invoiceTotal) || 0,
+        totalSats: Math.round((Number(invoiceTotal) || 0) * XOF_TO_SATS),
+        paymentMethod: 'Pending',
+        txHash: `ref_${paymentReference}`,
+        isPaid: false,
+        doctorName: doc.doctorName,
+        paymentQrCode: paymentQrCode || null,
+        contentHash: contentHash  // For blockchain anchor later
+      };
+
+      INVOICES_DB.push(invoice);
+    }
+
+    saveDb();
+
+    res.status(200).json({
+      success: true,
+      message: "Document envoyé au patient avec référence de paiement",
+      sent: sentRecord,
+      contentHash: contentHash
+    });
+  });
+
+  // 5g. GET DOCTOR'S PATIENT NOTIFICATIONS (Documents/Invoices sent)
+  app.get("/api/doctor/sent-documents/:doctorEmail", (req, res) => {
+    const { doctorEmail } = req.params;
+
+    const sentDocs = MEDICAL_DOCUMENTS_DB
+      .filter(d => d.doctorEmail?.toLowerCase() === doctorEmail.toLowerCase())
+      .map(d => ({
+        id: d.id,
+        title: d.title,
+        type: d.type,
+        sentHistory: d.sentHistory || [],
+        priceXOF: d.priceXOF,
+        priceSats: d.priceSats
+      }));
+
+    res.json(sentDocs);
+  });
+
+  // 5h. GET PATIENT RECEIVED DOCUMENTS & INVOICES (Real-time notifications)
+  app.get("/api/patient/received-documents/:patientEmail", (req, res) => {
+    const { patientEmail } = req.params;
+    const normalizedEmail = patientEmail.toLowerCase().trim();
+
+    // Collect all documents sent to this patient
+    const receivedDocs = MEDICAL_DOCUMENTS_DB
+      .filter(d => d.sentHistory?.some((s: any) => s.sentTo?.toLowerCase() === normalizedEmail))
+      .map(d => ({
+        id: d.id,
+        title: d.title,
+        type: d.type,
+        doctorName: d.doctorName,
+        hospitalName: d.hospitalName,
+        sentHistory: d.sentHistory?.filter((s: any) => s.sentTo?.toLowerCase() === normalizedEmail) || [],
+        history: d.history || []  // Full change history for transparency
+      }));
+
+    // Also collect invoices related to those documents
+    const relatedInvoices = INVOICES_DB.filter(inv =>
+      inv.patientEmail?.toLowerCase() === normalizedEmail &&
+      (inv.documentId || receivedDocs.some(d => d.id === inv.documentId))
+    );
+
+    res.json({
+      documents: receivedDocs,
+      invoices: relatedInvoices,
+      lastUpdate: new Date().toISOString()
+    });
+  });
+
+  // 5i. PATCH AUTO-GENERATE INVOICE AFTER APPOINTMENT (Called by hospital after appointment)
+  app.post("/api/appointments/:appointmentId/generate-invoice", (req, res) => {
+    const { appointmentId } = req.params;
+    const { invoiceItems, notes } = req.body;
+
+    const appointment = APPOINTMENTS_DB.find(apt => apt.id === appointmentId);
+    if (!appointment) {
+      return res.status(404).json({ error: "Rendez-vous non trouvé" });
+    }
+
+    // Calculate total
+    const itemsArray = invoiceItems || [
+      { name: `Consultation - ${appointment.service}`, priceXOF: 2000, priceSats: 3330 }
+    ];
+    const totalXOF = itemsArray.reduce((sum: number, item: any) => sum + (Number(item.priceXOF) || 0), 0);
+    const totalSats = Math.round(totalXOF * XOF_TO_SATS);
+
+    const invoice = {
+      id: `FACT-${Math.floor(100000 + Math.random() * 900000)}`,
+      appointmentId: appointmentId,
+      patientName: appointment.patientName,
+      patientEmail: appointment.patientEmail,
+      hospitalName: appointment.hospitalName,
+      date: new Date().toLocaleDateString('fr-FR') + ' à ' + new Date().toLocaleTimeString('fr-FR', {hour: '2-digit', minute:'2-digit'}),
+      items: itemsArray,
+      totalXOF,
+      totalSats,
+      paymentMethod: 'Pending',
+      txHash: `apt_${appointmentId}`,
+      isPaid: false,
+      doctorName: appointment.doctorName || 'Dr. Consulted',
+      notes: notes || appointment.reason
+    };
+
+    INVOICES_DB.push(invoice);
+    saveDb();
+
+    res.status(201).json({
+      success: true,
+      invoice: invoice,
+      message: "Facture générée automatiquement après rendez-vous"
+    });
+  });
+
+  // 5j. POST REQUEST BLOCKCHAIN ANCHOR (For document integrity verification)
+  app.post("/api/documents/:documentId/request-blockchain-anchor", (req, res) => {
+    const { documentId } = req.params;
+    const { contentHash } = req.body;
+
+    const doc = MEDICAL_DOCUMENTS_DB.find(d => d.id === documentId);
+    if (!doc) {
+      return res.status(404).json({ error: "Document introuvable" });
+    }
+
+    // In production, this would interact with Bitcoin testnet or mainnet
+    // For now, create a pending blockchain anchor record
+    const anchorId = `anchor_${sha256(documentId + Date.now())}`;
+    BLOCKCHAIN_ANCHORS[anchorId] = {
+      hash: contentHash || sha256(JSON.stringify(doc)),
+      timestamp: new Date().toISOString(),
+      status: 'pending',
+      documentId: documentId,
+      bitcoinAddress: 'tb1qw508d6qejxtdg4y5r3zarvary0c5xw7kv8f3t4'  // Example testnet address
+    };
+
+    // Simulate blockchain submission (in production, use Mempool or similar)
+    setTimeout(() => {
+      if (BLOCKCHAIN_ANCHORS[anchorId]) {
+        BLOCKCHAIN_ANCHORS[anchorId].status = 'confirmed';
+        BLOCKCHAIN_ANCHORS[anchorId].txid = `btc_tx_${Math.random().toString(36).substring(2, 15)}`;
+      }
+    }, 5000);  // Simulate 5-second confirmation
+
+    res.status(202).json({
+      success: true,
+      anchorId: anchorId,
+      status: 'pending',
+      message: "Demande d'ancrage blockchain en cours. Vérification en ~10 minutes.",
+      hash: BLOCKCHAIN_ANCHORS[anchorId].hash,
+      bitcoinAddress: BLOCKCHAIN_ANCHORS[anchorId].bitcoinAddress
+    });
+  });
+
+  // 5k. GET BLOCKCHAIN ANCHOR STATUS (Verify document integrity)
+  app.get("/api/documents/:documentId/anchor-status", (req, res) => {
+    const { documentId } = req.params;
+
+    const anchors = Object.values(BLOCKCHAIN_ANCHORS).filter(a => a.documentId === documentId);
+
+    if (anchors.length === 0) {
+      return res.status(404).json({ error: "Pas d'ancrage blockchain trouvé pour ce document" });
+    }
+
+    const latestAnchor = anchors[anchors.length - 1];
+
+    res.json({
+      documentId: documentId,
+      anchor: latestAnchor,
+      verified: latestAnchor.status === 'confirmed',
+      message: latestAnchor.status === 'confirmed'
+        ? `Document vérifié et ancré à ${latestAnchor.timestamp}`
+        : `Ancrage en cours... Status: ${latestAnchor.status}`
+    });
+  });
+
+  // 5l. VERIFY DOCUMENT INTEGRITY (SHA-256 hash check)
+  app.post("/api/documents/:documentId/verify-integrity", (req, res) => {
+    const { documentId } = req.params;
+    const { providedHash } = req.body;
+
+    const doc = MEDICAL_DOCUMENTS_DB.find(d => d.id === documentId);
+    if (!doc) {
+      return res.status(404).json({ error: "Document introuvable" });
+    }
+
+    const docContent = JSON.stringify({
+      title: doc.title,
+      items: doc.items,
+      notes: doc.notes,
+      priceXOF: doc.priceXOF,
+      priceSats: doc.priceSats,
+      date: doc.date
+    });
+    const computedHash = sha256(docContent);
+
+    const isValid = computedHash === providedHash;
+
+    res.json({
+      documentId: documentId,
+      computedHash: computedHash,
+      providedHash: providedHash,
+      isValid: isValid,
+      message: isValid ? "Document vérifié ✓ Aucune modification détectée" : "⚠️ Attention: Document modifié depuis l'envoi",
+      anchors: Object.values(BLOCKCHAIN_ANCHORS).filter(a => a.documentId === documentId)
+    });
   });
 
   // 5b. POST CREATE PATIENT PROFILE ON SIGNUP
